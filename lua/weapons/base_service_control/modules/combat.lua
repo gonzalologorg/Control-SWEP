@@ -102,21 +102,29 @@ function SWEP:ShootBullet(damage, num_bullets, aimcone, ammo_type, force, tracer
     bullet.Src = owner:GetShootPos() -- Source
     bullet.Dir = self:GetAimVector() -- Dir of bullet
     bullet.Spread = Vector(aimcone, aimcone, 0) -- Aim Cone
-    bullet.Tracer = tracer or 5 -- Show a tracer on every x bullets
+    bullet.Tracer = 1 -- Show a tracer on every x bullets
     bullet.Force = force or 1 -- Amount of force to give to phys objects
     bullet.Damage = damage
     bullet.AmmoType = ammo_type or self.Primary.Ammo
     owner:FireBullets(bullet)
     self:ShootEffects()
+
+    PrintTable(bullet)
 end
 
-function SWEP:PrimaryAttack()
+function SWEP:PrePrimaryAttack()
     if IsValid(self:GetGrabbing()) then
         self:ThrowProp()
         self:SetGrabbing(nil)
-        return
+        return false
     end
-    if self:GetBullets() <= 0 or self:GetBulletDrain() or not self:CanPrimaryAttack() then return end
+    if self:GetBullets() <= 0 or self:GetBulletDrain() or not self:CanPrimaryAttack() then return false end
+end
+
+function SWEP:PrimaryAttack()
+
+    local result = self:PrePrimaryAttack()
+    if result == false then return end
 
     self:EmitSound("Weapon_AR2.Single")
     self:ShootBullet(150, 1, self:GetIronSight() and 0.01 or 0.03, self.Primary.Ammo)
@@ -127,8 +135,6 @@ function SWEP:PrimaryAttack()
     end
     self.LastBullet = CurTime()
 
-    local owner = self:GetOwner()
-    if not owner:IsNPC() then owner:ViewPunch(Angle(-.1, 0, 0)) end
 end
 
 function SWEP:SecondaryAttack()
@@ -153,6 +159,7 @@ function SWEP:TranslateFOV()
     else
         self.LerpFOV = self:GetIronSight() and 35 or 75
     end
+
     if (self.ExtraFOV or 0) > 0 then
         self.ExtraFOV = self.ExtraFOV - FrameTime() / 2
         if self.ExtraFOV <= 0 then

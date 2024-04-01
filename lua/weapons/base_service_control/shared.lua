@@ -41,7 +41,7 @@ function SWEP:SetupDataTables()
 
     self:SetAimRight(true)
     self:SetEnergy(100)
-    self:SetBullets(100)
+    self:SetBullets(self.MaxBullets)
 
     self:NetworkVarNotify("IronSight", function(s, n, o, new)
         s:SetHoldType(new and "revolver" or "pistol")
@@ -68,7 +68,8 @@ function SWEP:SetupDataTables()
             s:SetEnergyDrain(false)
         end
     end)
-    
+
+    self:PostSetupDataTables()
 end
 
 function SWEP:Initialize()
@@ -109,15 +110,7 @@ function SWEP:OnReloaded()
     self:Initialize()
 end
 
-SWEP.NextEnergyCharge = 0
-SWEP.NextBulletCharge = 0
-function SWEP:Think()
-    local owner = self:GetOwner()
-
-    if self:GetIronSight() and not owner:KeyDown(IN_ATTACK2) then
-        self:SetIronSight(false)
-    end
-
+function SWEP:DoChargeBullets()
     if self:GetBullets() < self.MaxBullets and self.NextBulletCharge < CurTime() and self:GetBulletRecharge() < CurTime() then
         self:SetBullets(math.min(self.MaxBullets, self:GetBullets() + 1))
         self.NextBulletCharge = CurTime() + .15
@@ -129,7 +122,9 @@ function SWEP:Think()
             end
         end
     end
+end
 
+function SWEP:GrabThink()
     local ent = self:GetGrabbing()
     if not IsValid(ent) then
         if self:GetEnergy() >= self.MaxEnergy then return end
@@ -169,6 +164,19 @@ function SWEP:Think()
 
     self.LerpProp = LerpVector(FrameTime() * 10, self.LerpProp or forward, forward)
     ent:SetPos(SERVER and forward or self.LerpProp)
+end
+
+SWEP.NextEnergyCharge = 0
+SWEP.NextBulletCharge = 0
+function SWEP:Think()
+    local owner = self:GetOwner()
+
+    if self:GetIronSight() and not owner:KeyDown(IN_ATTACK2) then
+        self:SetIronSight(false)
+    end
+
+    self:DoChargeBullets()
+    self:GrabThink()
 end
 
 SWEP.LerpedSide = 1
