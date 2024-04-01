@@ -1,0 +1,20 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/Red_Menace/Control/Props/ServiceWeapon/Pierce/pierce"
+	"$bumpmap" "models/Red_Menace/Control/Props/ServiceWeapon/Pierce/pierce_n"
+
+	"$ambientocclusion" ".7"
+	"$color2" ".8"
+	
+	"$phongdisablehalflambert" "1"
+	"$phong" "1"
+	"$phongboost" "8"
+	"$phongtint" "[.933 .828 .318]"
+	"$phongfresnelranges" "[.76 .88 1]"
+	"$phongexponenttexture" "models/Red_Menace/Control/Props/ServiceWeapon/Pierce/pierce_exp"
+
+	"$envmap" "models\Red_Menace\Cubemap\softsilver.hdr"
+	"$normalmapalphaenvmapmask"		"1"
+	"$envmaptint"	"[.15 .145 .125]"
+	"$envmapfresnel"	"1"	
+}

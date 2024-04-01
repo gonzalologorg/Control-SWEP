@@ -1,0 +1,20 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/Red_Menace/Control/Props/ServiceWeapon/Grip/grip"
+	"$bumpmap" "models/Red_Menace/Control/Props/ServiceWeapon/Grip/grip_n"
+
+	"$translucent" "1"
+	"$ambientocclusion" ".7"
+	"$color2" ".8"
+	
+	"$phongdisablehalflambert" "1"
+	"$phong" "1"
+	"$phongboost" "2.2"
+	"$phongfresnelranges" "[.76 .88 1]"
+	"$phongexponenttexture" "models/Red_Menace/Control/Props/ServiceWeapon/Grip/grip_exp"
+
+	"$envmap" "models\Red_Menace\Cubemap\softsilver.hdr"
+	"$normalmapalphaenvmapmask"		"1"
+	"$envmaptint"	"[.125 .125 .125]"
+	"$envmapfresnel"	"1"	
+}

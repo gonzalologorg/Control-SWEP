@@ -1,0 +1,11 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/Red_Menace/Control/Props/ServiceWeapon/Charge/charge"
+	"$bumpmap" "models/Red_Menace/Control/Props/ServiceWeapon/Charge/charge_N"
+
+	"$phongdisablehalflambert" "1"
+	"$phong" "1"
+	"$phongboost" "16"
+	"$phongfresnelranges" "[.05 .15 1]"
+	"$phongexponenttexture" "models/Red_Menace/Control/Props/ServiceWeapon/Charge/charge_exp"	
+}
