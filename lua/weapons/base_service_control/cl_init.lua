@@ -3,7 +3,7 @@ include("modules/thirdperson.lua")
 include("modules/hud.lua")
 
 SWEP.ViewModel = "models/weapons/v_pistol.mdl"
-SWEP.WorldModel = "models/red_menace/control/props/serviceweapon/charge.mdl"
+SWEP.WorldModel = "models/red_menace/control/props/serviceweapon/grip.mdl"
 
 function SWEP:InitClient()
     SafeRemoveEntity(self._Model)
@@ -20,15 +20,6 @@ function SWEP:OnRemove()
     SafeRemoveEntity(self._Model)
 end
 
-function SWEP:GetMotionBlurValues()
-    local owner = self:GetOwner()
-    if owner == LocalPlayer() then
-        if self.ExtraFOV <= 0 then return end
-        local power = self.ExtraFOV / 20
-        return 0, 0, power / 2, 0
-    end
-end
-
 function SWEP:DrawWorldModel()
     local owner = self:GetOwner()
     local handBone = owner:LookupBone("ValveBiped.Bip01_R_Hand")
@@ -42,26 +33,21 @@ function SWEP:DrawWorldModel()
     self._Model:DrawModel()
 end
 
-local bonesNames = {
-    BarrelUpper = Vector(0, .5, 0),
-    BarrelLowerLeft = Vector(-1, -.5, -.5),
-    BarrelLowerRight = Vector(1, -.5, -.5),
-}
-
-local boneCenter = "BarrelCentral"
 local didPlay = false
 function SWEP:ManipulateBones(mdl)
     if not self.LastBullet then return end
 
     local progress = 1 - math.Clamp((CurTime() - self.LastBullet) * 10, 0, 1)
-    for bone, dir in pairs(bonesNames) do
-        local bId = mdl:LookupBone(bone)
-        mdl:ManipulateBonePosition(bId, dir * progress * 4)
+    if progress == 0 then
+        mdl:SetSequence("idle")
+    else
+        mdl:SetSequence("reticle")
+        mdl:SetCycle(progress)
     end
 
     if progress == 1 and not didPlay then
         didPlay = true
-        local bId = mdl:LookupBone(boneCenter)
+        local bId = mdl:LookupBone("Sights")
         local pos, ang = mdl:GetBonePosition(bId)
         local eff = EffectData()
         pos = pos + ang:Forward() * 0 + ang:Up() * 24 + ang:Right() * -4
