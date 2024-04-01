@@ -12,6 +12,14 @@ function SWEP:CalcView(ply)
     return tbl
 end
 
+function SWEP:GetMotionBlurValues()
+    local owner = self:GetOwner()
+    if owner == LocalPlayer() then
+        if self.ExtraFOV <= 0 then return end
+        local power = self.ExtraFOV / 20
+        return 0, 0, power / 2, 0
+    end
+end
 
 function SWEP:Reload()
 
